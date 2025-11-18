@@ -1,0 +1,390 @@
+{
+	"info": {
+		"_postman_id": "100d2416-a569-41cc-a4ef-3965ce5119c2",
+		"name": "FastAPI Tableau Webhooks",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13750038"
+	},
+	"item": [
+		{
+			"name": "Tableau REST API",
+			"item": [
+				{
+					"name": "Authenticate",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonResp = pm.response.json()",
+									"",
+									"pm.environment.set(\"access_token\",jsonResp.credentials.token)",
+									"pm.environment.set(\"site_luid\",jsonResp.credentials.site.id)"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"credentials\": {\n    \"personalAccessTokenName\":\"{{pat_name}}\",\n    \"personalAccessTokenSecret\":\"{{pat_secret}}\",\n    \"site\": {\n      \"contentUrl\":\"{{site_name}}\"\n    }\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host_root}}/api/{{api_version}}/auth/signin/",
+							"host": [
+								"{{host_root}}"
+							],
+							"path": [
+								"api",
+								"{{api_version}}",
+								"auth",
+								"signin",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Webhooks",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "x-tableau-auth",
+								"value": "{{access_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host_root}}/api/{{api_version}}/sites/{{site_luid}}/webhooks",
+							"host": [
+								"{{host_root}}"
+							],
+							"path": [
+								"api",
+								"{{api_version}}",
+								"sites",
+								"{{site_luid}}",
+								"webhooks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get A Webhook",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "x-tableau-auth",
+								"value": "{{access_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host_root}}/api/{{api_version}}/sites/{{site_luid}}/webhooks/f5676ec1-17fc-41a3-a4db-8d7ec67d3216",
+							"host": [
+								"{{host_root}}"
+							],
+							"path": [
+								"api",
+								"{{api_version}}",
+								"sites",
+								"{{site_luid}}",
+								"webhooks",
+								"f5676ec1-17fc-41a3-a4db-8d7ec67d3216"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a Webhook",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "x-tableau-auth",
+								"value": "{{access_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"webhook\": {\n    \"name\": \"Extract Refresh Succeeded\",\n    \"event\": \"WorkbookRefreshSucceeded\",\n    \"webhook-destination\": {\n      \"webhook-destination-http\": {\n        \"method\": \"POST\",\n        \"url\": \"https://fastapi-tableau-webhooks-18c934b7d889.herokuapp.com/refresh-success-with-pdf\"\n      }\n    }\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host_root}}/api/{{api_version}}/sites/{{site_luid}}/webhooks/",
+							"host": [
+								"{{host_root}}"
+							],
+							"path": [
+								"api",
+								"{{api_version}}",
+								"sites",
+								"{{site_luid}}",
+								"webhooks",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a Webhook",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "x-tableau-auth",
+								"value": "{{access_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"webhook\": {\n    \"name\": \"WebhookTest1117\",\n    \"event\": \"WorkbookUpdated\",\n    \"isEnabled\": true,\n    \"webhook-destination\": {\n      \"webhook-destination-http\": {\n        \"method\": \"POST\",\n        \"url\": \"https://x.com\"\n      }\n    }\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host_root}}/api/{{api_version}}/sites/{{site_luid}}/webhooks/c774f591-a60a-4a31-936e-81aeb670b945/",
+							"host": [
+								"{{host_root}}"
+							],
+							"path": [
+								"api",
+								"{{api_version}}",
+								"sites",
+								"{{site_luid}}",
+								"webhooks",
+								"c774f591-a60a-4a31-936e-81aeb670b945",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a Webhook",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "x-tableau-auth",
+								"value": "{{access_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host_root}}/api/{{api_version}}/sites/{{site_luid}}/webhooks/c774f591-a60a-4a31-936e-81aeb670b945/",
+							"host": [
+								"{{host_root}}"
+							],
+							"path": [
+								"api",
+								"{{api_version}}",
+								"sites",
+								"{{site_luid}}",
+								"webhooks",
+								"c774f591-a60a-4a31-936e-81aeb670b945",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "FastAPI",
+			"item": [
+				{
+					"name": "Admin Promoted",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"resource\": \"USER\",\n    \"event_type\": \"AdminPromoted\",\n    \"resource_name\": \"Test user\",\n    \"site_luid\": \"f8dbec1d-2217-42b0-868a-229a2ff090bb\",\n    \"resource_luid\": \"283f6a92-4f5b-437b-ba93-deded0e000a4\",\n    \"created_at\": \"2018-11-15T17:14:45Z\"\n}\n\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localhost_root}}/admin-promoted",
+							"host": [
+								"{{localhost_root}}"
+							],
+							"path": [
+								"admin-promoted"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Datasource Created",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"resource\": \"DATASOURCE\",\n    \"event_type\": \"DatasourceCreated\",\n    \"resource_name\": \"My Datasource\",\n    \"site_luid\": \"f8dbec1d-2217-42b0-868a-229a2ff090bb\",\n    \"resource_luid\": \"95aed20e-22a7-4420-9e22-bdfb9fe70e0e\",\n    \"created_at\": \"2018-11-15T17:14:45Z\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localhost_root}}/datasource-created",
+							"host": [
+								"{{localhost_root}}"
+							],
+							"path": [
+								"datasource-created"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Extract Refresh Failed",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"resource\": \"EXTRACTS\",\n    \"event_type\": \"WorkbookRefreshFailed\",\n    \"resource_name\": \"My Workbook\",\n    \"site_luid\": \"f8dbec1d-2217-42b0-868a-229a2ff090bb\",\n    \"resource_luid\": \"d7af7417-8997-48d8-b1ee-c7ad6c23a05f\",\n    \"created_at\": \"2018-11-15T17:14:45Z\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localhost_root}}/workbook-refresh-failed",
+							"host": [
+								"{{localhost_root}}"
+							],
+							"path": [
+								"workbook-refresh-failed"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Workbook Refresh Success w/ PDF",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"resource\": \"EXTRACTS\",\n    \"event_type\": \"WorkbookRefreshSucceeded\",\n    \"resource_name\": \"My Workbook\",\n    \"site_luid\": \"f8dbec1d-2217-42b0-868a-229a2ff090bb\",\n    \"resource_luid\": \"d7af7417-8997-48d8-b1ee-c7ad6c23a05f\",\n    \"created_at\": \"2018-11-15T17:14:45Z\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localhost_root}}/refresh-success-with-pdf",
+							"host": [
+								"{{localhost_root}}"
+							],
+							"path": [
+								"refresh-success-with-pdf"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
